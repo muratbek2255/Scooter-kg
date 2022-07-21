@@ -41,11 +41,11 @@ EMAIL_HOST_USER=your@your.com
 EMAIL_HOST_PASSWORD=pass
 EMAIL_PORT=587
 
-4) Создать образ
+7) Создать образ
 docker-compose build
-5) Запустить контейнер
+8) Запустить контейнер
 docker-compose up
-6) Создать суперюзера
+9) Создать суперюзера
 docker exec -it your project python manage.py createsuperuser
-7) Если нужно очистить БД
+10) Если нужно очистить БД
 docker-compose down -v
