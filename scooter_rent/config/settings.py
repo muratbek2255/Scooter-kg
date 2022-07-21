@@ -11,12 +11,23 @@ https://docs.djangoproject.com/en/4.0/ref/settings/
 """
 import os
 from pathlib import Path
+import environ
 
-BASE_DIR = Path(__file__).resolve().parent.parent
+env = environ.Env()
 
-SECRET_KEY = 'django-insecure-=kuvgm7cp660@$54%jwj+o0aod!-+)u41xmj(1!im*yul4bswi'
+# Build paths inside the project like this: BASE_DIR / 'subdir'.
+BASE_DIR = env('BASE_DIR')
 
-DEBUG = True
+
+# Quick-start development settings - unsuitable for production
+# See https://docs.djangoproject.com/en/4.0/howto/deployment/checklist/
+
+# SECURITY WARNING: keep the secret key used in production secret!
+SECRET_KEY = env('SECRET_KEY')
+
+# SECURITY WARNING: don't run with debug turned on in production!
+DEBUG = env('DEBUG')
+
 
 ALLOWED_HOSTS = ["*"]
 
@@ -97,24 +108,13 @@ WSGI_APPLICATION = 'config.wsgi.application'
 DATABASES = {
     'default': {
         'ENGINE': 'django.db.backends.postgresql_psycopg2',
-        'NAME': 'scooter',
-        'USER': 'murat4',
-        'PASSWORD': 'neymarjunior23',
-        'HOST': 'localhost',
-        'PORT': '5432'
+        'NAME': env('POSTGRES_DB'),
+        'USER': env('POSTGRES_USER'),
+        'PASSWORD': env('POSTGRES_PASSWORD'),
+        'HOST': env('POSTGRES_HOST'),
+        'PORT': env('POSTGRES_PORT')
     }
 }
-
-# DATABASES = {
-#     'default': {
-#         'ENGINE': 'django.db.backends.postgresql_psycopg2',
-#         'NAME': env('POSTGRES_DB'),
-#         'USER': env('POSTGRES_USER'),
-#         'PASSWORD': env('POSTGRES_PASSWORD'),
-#         'HOST': env('POSTGRES_HOST'),
-#         'PORT': env('POSTGRES_PORT')
-#     }
-# }
 
 
 # Password validation
