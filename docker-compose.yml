@@ -1,0 +1,39 @@
+version: "3.9"
+
+services:
+  db:
+    image: postgres:14.0-alpine
+    volumes:
+      - postgres_data:/var/lib/postgresql/data/
+    networks:
+      - my_network
+    env_file:
+      - .env
+
+
+  scooter_kg_web:
+    container_name: scooter_kg_zaeb
+    build:
+      context: .
+    command: python manage.py runserver 0.0.0.0:8000
+    volumes:
+      - .:/usr/src/scooter-kg/
+      - ./static/:/static
+      - ./media/:/media
+    entrypoint: ./wsgi-entrypoint.sh
+    depends_on:
+      - db
+    networks:
+      - my_network
+    ports:
+      - 8000:8000
+    env_file:
+      - .env
+
+volumes:
+  media:
+  static:
+  postgres_data:
+
+networks:
+  my_network:
