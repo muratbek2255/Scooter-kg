@@ -30,6 +30,27 @@ services:
     env_file:
       - .env
 
+  redis:
+    container_name: send_mail_redis_scooter
+    image: redis
+    networks:
+      - my-network
+
+
+  celery:
+    build:
+      context: .
+    container_name: celery-scooter
+    restart: always
+    command: sh -c "celery -A config worker -l INFO"
+    volumes:
+      - ./:/scooter-kg
+    depends_on:
+      - redis
+      - web
+    networks:
+      - my-network
+
 volumes:
   media:
   static:
