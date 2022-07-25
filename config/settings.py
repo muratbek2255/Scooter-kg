@@ -168,31 +168,3 @@ MEDIA_ROOT = os.path.join(BASE_DIR, 'assets/media')
 # https://docs.djangoproject.com/en/4.0/ref/settings/#default-auto-field
 
 DEFAULT_AUTO_FIELD = 'django.db.models.BigAutoField'
-
-
-EMAIL_BACKEND = 'django.core.mail.backends.smtp.EmailBackend'
-EMAIL_USE_TLS = True
-EMAIL_HOST = 'smtp.gmail.com'
-EMAIL_PORT = 587
-EMAIL_HOST_USER = env('EMAIL_HOST_USER')
-EMAIL_HOST_PASSWORD = env('EMAIL_HOST_PASSWORD')
-
-CELERY_BROKER_URL = 'redis://redis:6379'
-CELERY_BROKER_TRANSPORT = 'redis'
-CELERY_ACCEPT_CONTENT = ['json']
-CELERY_TASK_SERIALIZER = 'json'
-CELERY_TIMEZONE = "UTC"
-CELERY_TASK_TRACK_STARTED = True
-CELERY_TASK_TIME_LIMIT = 30 * 60
-CELERY_RESULT_BACKEND = 'redis://redis:6379'
-
-SOCIAL_AUTH_POSTGRES_JSONFIELD = True
-
-AUTHENTICATION_BACKENDS = (
-    'social_core.backends.github.GithubOAuth2',
-    'django.contrib.auth.backends.ModelBackend',
-)
-
-
-SOCIAL_AUTH_GITHUB_KEY = '108c089da2a7e8e8e0d1'
-SOCIAL_AUTH_GITHUB_SECRET = '18d91bd5444643ebb04b9188e0d737b856830665'
