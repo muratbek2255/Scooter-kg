@@ -1,9 +1,9 @@
 FROM python:3.9
 
-WORKDIR /usr/src/scooter-kg
-
 ENV PYTHONDONTWRITEBYTECODE 1
 ENV PYTHONUNBUFFERED 1
+
+WORKDIR /app
 
 RUN apt-get update \
     && apt-get install netcat -y
@@ -13,12 +13,16 @@ RUN curl -sSL https://raw.githubusercontent.com/python-poetry/poetry/master/get-
     ln -s /opt/poetry/bin/poetry && \
     poetry config virtualenvs.create false
 
-COPY pyproject.toml ./poetry.lock* /usr/src/scooter-kg/
-
+COPY pyproject.toml ./poetry.lock* /app/
 RUN poetry install
 
-COPY . /usr/src/scooter-kg/
+COPY . /app/
+COPY ./wsgi-entrypoint.sh ./
+RUN chmod 777 ./wsgi-entrypoint.sh
+RUN chmod +x ./run-celery.sh
+RUN chmod +x ./run-celery_beat.sh
+RUN export $(grep -v "^#" .env | xargs)
 
-RUN chmod 755 /usr/src/scooter-kg/wsgi-entrypoint.sh
+EXPOSE 8000
 
-CMD [ "chmod", "+x", "wsgi-entrypoint.sh" ]
+ENTRYPOINT ["./wsgi-entrypoint.sh", "./run-celery.sh", "./run-celery_beat.sh"]

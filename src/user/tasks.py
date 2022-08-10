@@ -1,34 +1,35 @@
-from celery import shared_task
-from django.conf import settings
-from django.contrib.auth import get_user_model
 from django.core.mail import send_mail
-from django.template.loader import render_to_string
-from django.utils.encoding import force_bytes
-from django.utils.http import urlsafe_base64_encode
 
-from src.user.services import EmailThread
-
-User = get_user_model()
+from django.conf import settings
+from config.celery import app
 
 
-@shared_task
-def send_email(site, user):
-    user = User.objects.get(user_id=user)
-
-    user = user.email
-    current_site = site
-    subject = 'Активируйте свой аккаунт'
-    message = render_to_string('emails/activation_email.html', {
-        'user': user,
-        'domain': current_site,
-        'uid': urlsafe_base64_encode(force_bytes(user.pk)),
-    })
-
+@app.task
+def send_activation_code(email, activation_code):
+    activation_url = f'http://0.0.0.0:8000/ru/api/v1/activate/{activation_code}/'
+    message = f"""
+        Thank you for signing up.
+        Please, activate your account.
+        Activation link: {activation_url}
+    """
     send_mail(
-        subject,
+        'Activate your account',
         message,
         settings.EMAIL_HOST_USER,
-        [user.email],
-        fail_silently=False,
+        [email, ],
+        fail_silently=True
     )
-    EmailThread(message).start()
+
+
+@app.task
+def send_reset_code(email, activation_code):
+    message = f"""
+        Activation code: {activation_code}
+    """
+    send_mail(
+        'Reset your password',
+        message,
+        settings.EMAIL_HOST_USER,
+        [email, ],
+        fail_silently=False
+    )

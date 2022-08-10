@@ -6,50 +6,80 @@ services:
     volumes:
       - postgres_data:/var/lib/postgresql/data/
     networks:
-      - my_network
+      - my-network
     env_file:
       - .env
 
 
   scooter_kg_web:
-    container_name: scooter_kg_zaeb
+    container_name: scooter_kg_cont
     build:
       context: .
-    command: python manage.py runserver 0.0.0.0:8000
+    restart: unless-stopped
     volumes:
-      - .:/usr/src/scooter-kg/
+      - .:/app
       - ./static/:/static
       - ./media/:/media
     entrypoint: ./wsgi-entrypoint.sh
     depends_on:
       - db
-    networks:
-      - my_network
+      - redis
+      - rabbitmq
     ports:
       - 8000:8000
+    networks:
+      - my-network
     env_file:
       - .env
 
-  redis:
-    container_name: send_mail_redis_scooter
-    image: redis
+  rabbitmq:
+    image: rabbitmq:3.7.4
+    container_name: rabbitmq
+    env_file: .env
     networks:
       - my-network
 
+  redis:
+    container_name: send_mail_redis
+    image: redis
+    env_file:
+      - .env
+    networks:
+      - my-network
 
-  celery:
+  celery_worker:
+    restart: always
     build:
       context: .
-    container_name: celery-scooter
-    restart: always
-    command: sh -c "celery -A config worker -l INFO"
+    image: django_celery_example_celery_worker
     volumes:
-      - ./:/scooter-kg
-    depends_on:
-      - redis
-      - web
+      - .:/app
+    entrypoint: ./run-celery.sh
+    env_file:
+      - .env
     networks:
       - my-network
+    depends_on:
+      - redis
+      - rabbitmq
+      - scooter_kg_web
+
+  celery_beat:
+    build:
+      context: .
+    image: django_celery_example_celery_beat
+    volumes:
+      - .:/app
+    entrypoint: ./run-celery_beat.sh
+    env_file:
+      - .env
+    networks:
+      - my-network
+    depends_on:
+      - redis
+      - rabbitmq
+      - scooter_kg_web
+
 
 volumes:
   media:
@@ -57,4 +87,4 @@ volumes:
   postgres_data:
 
 networks:
-  my_network:
+  my-network:

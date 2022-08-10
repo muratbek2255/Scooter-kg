@@ -140,3 +140,7 @@ dmypy.json
 
 # Cython debug symbols
 cython_debug/
+!/media/
+!/Path(__file__).resolve().parent.parent/
+!/project/
+!/static/
