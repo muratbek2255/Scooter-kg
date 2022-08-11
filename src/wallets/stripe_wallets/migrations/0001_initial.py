@@ -30,7 +30,7 @@ class Migration(migrations.Migration):
                 ('type', models.CharField(choices=[('платеж получен', 'платеж получен'), ('платеж сделан', 'платеж сделан'), ('платеж снят', 'платеж снят'), ('платеж заполнен', 'платеж заполнен')], default='payment_made', max_length=64)),
                 ('date', models.DateField(auto_now_add=True, verbose_name='Dates')),
                 ('value', models.DecimalField(decimal_places=2, default=0, max_digits=15)),
-                ('wallet', models.ForeignKey(on_delete=django.db.models.deletion.CASCADE, related_name='transactions', to='stripe_payment.wallet', verbose_name='Wallet')),
+                ('wallet', models.ForeignKey(on_delete=django.db.models.deletion.CASCADE, related_name='transactions', to='stripe_wallets.wallet', verbose_name='Wallet')),
             ],
         ),
     ]
