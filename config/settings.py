@@ -16,6 +16,7 @@ import environ
 
 from pathlib import Path
 
+from firebase_admin import initialize_app
 
 env = environ.Env()
 
@@ -80,9 +81,12 @@ INSTALLED_APPS = [
     'src.user',
     'src.scooter',
     'src.bicycle',
+    'src.cart',
+    'src.order',
+    'src.payment',
     'src.notification',
-    'src.payments.paybox_payments',
-    'src.payments.stripe_payment',
+    'src.wallets.paybox_wallets',
+    'src.wallets.stripe_wallets',
 ]
 
 CRISPY_TEMPLATE_PACK = 'bootstrap4'
@@ -140,6 +144,16 @@ DATABASES = {
     }
 }
 
+# DATABASES = {
+#     'default': {
+#         'ENGINE': 'django.db.backends.postgresql_psycopg2',
+#         'NAME': 'scooter_bicycle3',
+#         'USER': 'murat4',
+#         'PASSWORD': 'neymarjunior23',
+#         'HOST': 'localhost',
+#         'PORT': '5432'
+#     }
+# }
 
 # Password validation
 # https://docs.djangoproject.com/en/4.0/ref/settings/#auth-password-validators
@@ -321,6 +335,8 @@ LOGGING = {
 CSRF_COOKIE_SECURE = True
 
 FIREBASE_API_KEY = env('FIREBASE_API_KEY')
+
+FIREBASE_APP = initialize_app()
 
 FCM_DJANGO_SETTINGS = {
     "APP_VERBOSE_NAME": "My APP",

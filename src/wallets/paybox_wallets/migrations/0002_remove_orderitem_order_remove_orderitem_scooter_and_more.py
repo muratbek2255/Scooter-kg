@@ -6,7 +6,7 @@ from django.db import migrations
 class Migration(migrations.Migration):
 
     dependencies = [
-        ('paybox_payments', '0001_initial'),
+        ('paybox_wallets', '0001_initial'),
     ]
 
     operations = [

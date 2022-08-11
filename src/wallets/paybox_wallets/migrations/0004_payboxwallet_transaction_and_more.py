@@ -9,7 +9,7 @@ class Migration(migrations.Migration):
 
     dependencies = [
         migrations.swappable_dependency(settings.AUTH_USER_MODEL),
-        ('paybox_payments', '0003_initial'),
+        ('paybox_wallets', '0003_initial'),
     ]
 
     operations = [
@@ -29,7 +29,7 @@ class Migration(migrations.Migration):
                 ('type', models.CharField(choices=[('платеж получен', 'платеж получен'), ('платеж сделан', 'платеж сделан'), ('платеж снят', 'платеж снят'), ('платеж заполнен', 'платеж заполнен')], default='payment_made', max_length=64)),
                 ('date', models.DateField(auto_now_add=True, verbose_name='Dates')),
                 ('value', models.DecimalField(decimal_places=2, default=0, max_digits=15)),
-                ('wallet', models.ForeignKey(on_delete=django.db.models.deletion.CASCADE, related_name='paybox_transactions', to='paybox_payments.payboxwallet', verbose_name='paybox_wallet')),
+                ('wallet', models.ForeignKey(on_delete=django.db.models.deletion.CASCADE, related_name='paybox_transactions', to='paybox_wallets.payboxwallet', verbose_name='paybox_wallet')),
             ],
         ),
         migrations.RemoveField(

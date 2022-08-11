@@ -36,7 +36,7 @@ class Migration(migrations.Migration):
                 ('id', models.BigAutoField(auto_created=True, primary_key=True, serialize=False, verbose_name='ID')),
                 ('qunatity', models.IntegerField(default=0, null=True)),
                 ('date_added', models.DateTimeField(auto_now_add=True, verbose_name='Ordered time')),
-                ('order', models.ForeignKey(blank=True, null=True, on_delete=django.db.models.deletion.SET_NULL, related_name='order_items', to='paybox_payments.order', verbose_name='Order')),
+                ('order', models.ForeignKey(blank=True, null=True, on_delete=django.db.models.deletion.SET_NULL, related_name='order_items', to='paybox_wallets.order', verbose_name='Order')),
                 ('scooter', models.ForeignKey(blank=True, null=True, on_delete=django.db.models.deletion.SET_NULL, related_name='scooter_items', to='scooter.scooter', verbose_name='Book')),
             ],
             options={

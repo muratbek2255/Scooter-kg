@@ -238,6 +238,14 @@ class OtpSerializer(serializers.ModelSerializer):
         return Response({'errors': 'Срок годности кода прошел'})
 
 
+class ResetPasswordEmailRequestSerializer(serializers.Serializer):
+    email = serializers.EmailField(min_length=2)
+
+    class Meta:
+        model = User
+        fields = ['email']
+
+
 class CreateNewPasswordSerializerAfterReset(serializers.Serializer):
     email = serializers.EmailField(max_length=500, required=True)
     activation_code = serializers.CharField(max_length=6, min_length=6, required=True)

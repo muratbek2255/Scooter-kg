@@ -6,7 +6,7 @@ from config.celery import app
 
 @app.task
 def send_activation_code(email, activation_code):
-    activation_url = f'http://0.0.0.0:8000/ru/api/v1/activate/{activation_code}/'
+    activation_url = f'https://4977-212-42-120-155.in.ngrok.io/ru/api/v1/activate/{activation_code}/'
     message = f"""
         Thank you for signing up.
         Please, activate your account.

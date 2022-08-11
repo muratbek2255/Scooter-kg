@@ -9,7 +9,7 @@ class Migration(migrations.Migration):
 
     dependencies = [
         migrations.swappable_dependency(settings.AUTH_USER_MODEL),
-        ('stripe_payment', '0001_initial'),
+        ('stripe_wallets', '0001_initial'),
     ]
 
     operations = [
@@ -24,7 +24,7 @@ class Migration(migrations.Migration):
         migrations.AlterField(
             model_name='transaction',
             name='wallet',
-            field=models.ForeignKey(on_delete=django.db.models.deletion.CASCADE, related_name='stripe_transactions', to='stripe_payment.stripewallet', verbose_name='Wallet'),
+            field=models.ForeignKey(on_delete=django.db.models.deletion.CASCADE, related_name='stripe_transactions', to='stripe_wallets.stripewallet', verbose_name='Wallet'),
         ),
         migrations.DeleteModel(
             name='Wallet',

@@ -30,10 +30,16 @@ urlpatterns = [
     # path('auth/', auth),
     # path('index', index),
     # path('accounts/', include('allauth.urls')),
-    # for payments
-    path('api/v1/payments/', include('src.payments.stripe_payment.urls')),
+    # for wallets
+    path('api/v1/wallets/', include('src.wallets.stripe_wallets.urls')),
     # for push notification
     path('api/v1/push/', include('src.notification.urls')),
+    # for cart
+    path('api/v1/cart/', include('src.cart.urls')),
+    # for order
+    path('api/v1/order/', include('src.order.urls')),
+    # for payment
+    path('api/v1/payment/', include('src.payment.urls')),
     # django model translation
     path('i18n/', include('django.conf.urls.i18n')),
 ]

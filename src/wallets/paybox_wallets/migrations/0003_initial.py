@@ -16,7 +16,7 @@ class Migration(migrations.Migration):
         ('bicycle', '0004_ratingbicyclerelation'),
         migrations.swappable_dependency(settings.AUTH_USER_MODEL),
         ('scooter', '0005_ratingscooterrelation'),
-        ('paybox_payments', '0002_remove_orderitem_order_remove_orderitem_scooter_and_more'),
+        ('paybox_wallets', '0002_remove_orderitem_order_remove_orderitem_scooter_and_more'),
     ]
 
     operations = [
@@ -40,7 +40,7 @@ class Migration(migrations.Migration):
                 ('id', models.BigAutoField(auto_created=True, primary_key=True, serialize=False, verbose_name='ID')),
                 ('duration', models.DateField(default=datetime.time, verbose_name='Срок действия до')),
                 ('bicycle', models.ForeignKey(null=True, on_delete=django.db.models.deletion.SET_NULL, related_name='bycicle_tariffs', to='bicycle.bicycle')),
-                ('package', models.ForeignKey(null=True, on_delete=django.db.models.deletion.SET_NULL, related_name='organizations', to='paybox_payments.package')),
+                ('package', models.ForeignKey(null=True, on_delete=django.db.models.deletion.SET_NULL, related_name='organizations', to='paybox_wallets.package')),
                 ('scooter', models.ForeignKey(null=True, on_delete=django.db.models.deletion.SET_NULL, related_name='tariffs', to='scooter.scooter')),
             ],
             options={
@@ -73,7 +73,7 @@ class Migration(migrations.Migration):
                 ('created_at', models.DateTimeField(auto_now_add=True, verbose_name='Дата и время создания')),
                 ('payed_at', models.DateTimeField(null=True, verbose_name='Дата и время оплаты')),
                 ('client', models.ForeignKey(null=True, on_delete=django.db.models.deletion.SET_NULL, to=settings.AUTH_USER_MODEL, verbose_name='Клиент')),
-                ('tariff', models.ForeignKey(help_text='создайте новое отношение Сайт-Тариф: кнопка плюса', null=True, on_delete=django.db.models.deletion.SET_NULL, related_name='payments', to='paybox_payments.scootertariffpackage', verbose_name='Сайт-Тариф')),
+                ('tariff', models.ForeignKey(help_text='создайте новое отношение Сайт-Тариф: кнопка плюса', null=True, on_delete=django.db.models.deletion.SET_NULL, related_name='wallets', to='paybox_wallets.scootertariffpackage', verbose_name='Сайт-Тариф')),
             ],
             options={
                 'verbose_name': 'Платеж',
@@ -83,6 +83,6 @@ class Migration(migrations.Migration):
         migrations.AddField(
             model_name='package',
             name='tariff',
-            field=models.ForeignKey(null=True, on_delete=django.db.models.deletion.SET_NULL, related_name='packages', to='paybox_payments.tariff'),
+            field=models.ForeignKey(null=True, on_delete=django.db.models.deletion.SET_NULL, related_name='packages', to='paybox_wallets.tariff'),
         ),
     ]

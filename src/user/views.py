@@ -15,7 +15,7 @@ from twilio.rest import Client
 from src.user.serializers import (
     UserRegistrationSerializer, LoginSerializer, LogOutSerializer,
     UserSerializer, ChangePasswordSerializer, UpdateUserSerializer,
-    OtpSerializer, PhoneNumberSerializer, CreateNewPasswordSerializerAfterReset
+    OtpSerializer, PhoneNumberSerializer, CreateNewPasswordSerializerAfterReset, ResetPasswordEmailRequestSerializer
 )
 from src.user.services import generate_otp
 from src.user.tasks import (
@@ -159,27 +159,34 @@ class DeleteAccountAPIView(views.APIView):
 
 class ActivateView(views.APIView):
     """Активация кода через эл.почту"""
-    def get(self, activation_code):
-        user = get_object_or_404(User, activation_code=activation_code)
+    def get(self, request, activation_code):
+        user = User()
         user.is_active = True
-        user.activation_code = ''
+        user.activation_code = activation_code
         user.save()
         return Response('Your account successfully activated!', status=status.HTTP_200_OK)
 
 
-class ForgotPassword(views.APIView):
+class ForgotPassword(generics.GenericAPIView):
     """ Отправка на эл.почту для сброса пароля """
 
+    serializer_class = ResetPasswordEmailRequestSerializer
     permission_classes = (permissions.IsAuthenticated, )
 
-    def get(self, request):
+    def post(self, request):
+        serializer = ResetPasswordEmailRequestSerializer(data=request.data)
         email = request.query_params.get('email')
-        user = get_object_or_404(User, email=email)
-        user.is_active = False
-        user.create_activation_code()
-        user.save()
-        send_reset_code.delay(email=user.email, activation_code=user.activation_code)
-        return Response('Вам отправлено сообщение', status=200)
+
+        if User.objects.filter(email=email).exists():
+            user = request.user
+            user.is_active = False
+            user.create_activation_code()
+            user.save()
+            print(user)
+            send_reset_code.delay(email=user.email, activation_code=user.activation_code)
+            return Response("Вам отправили сообщение", status=status.HTTP_200_OK)
+        else:
+            return Response({'success': False, 'message': 'Could not password, invalid token'}, status.HTTP_400_BAD_REQUEST)
 
 
 class ForgotPasswordComplete(views.APIView):
