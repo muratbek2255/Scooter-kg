@@ -1,0 +1,7 @@
+[program:scooter_rent]
+command=/home/murat/venv/bin/gunicorn django_movie.wsgi:application -c /home/murat/PycharmProjects/Scooter-KG/scooter_rent/server_config/gunicorn.conf.py
+directory=/home/murat/PycharmProjects/Scooter-KG/scooter_rent
+user=murat
+autorestart=true
+redirect_stderr=true
+stdout_logfile=/home/murat/PycharmProjects/Scooter-KG/scooter_rent/debug.log
